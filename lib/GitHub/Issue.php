@@ -10,9 +10,9 @@ class Issue
         $this->http = $http;
     }
 
-    public function post(User $user, $org, $repo, $issue)
+    public function get(User $user, $org, $repo, $id)
     {
-        $request = $this->http->post("/repos/{$org}/{$repo}/issues", null, $issue);
+        $request = $this->http->get("/repos/{$org}/{$repo}/issues/$id");
         try {
             $response = $user->auth($request)->send();
         } catch (\Guzzle\Http\Exception\ClientErrorResponseException $e) {
@@ -20,5 +20,31 @@ class Issue
         }
 
         return json_decode($response->getBody());
+    }
+
+    public function create(User $user, $org, $repo, $data)
+    {
+        $request = $this->http->post("/repos/{$org}/{$repo}/issues", null, $data);
+        try {
+            $response = $user->auth($request)->send();
+        } catch (\Guzzle\Http\Exception\ClientErrorResponseException $e) {
+            echo $e->getMessage();
+            return false;
+        }
+        $data = json_decode($response->getBody(true));
+        return $data;
+    }
+
+    public function patch(User $user, $org, $repo, $id, $data)
+    {
+        $request = $this->http->patch("/repos/{$org}/{$repo}/issues/{$id}", null, json_encode($data));
+        try {
+            $response = $user->auth($request)->send();
+        } catch (\Guzzle\Http\Exception\ClientErrorResponseException $e) {
+            echo $e->getMessage();
+            return false;
+        }
+
+        return true;
     }
 }
