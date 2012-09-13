@@ -40,4 +40,10 @@ $app->get('/rels/tickets', function() use ($app) {
     return $github->getIssues();
 });
 
+$app->post('/rels/ticket', function(Request $request) use ($app) {
+    $github = new RestFest\GitHub($app['http'], $app['anonymous']);
+    $responseContent = $github->createIssue($request->getContent());
+    return new Response($responseContent, 201);
+});
+
 $app->run();

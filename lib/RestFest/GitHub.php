@@ -29,4 +29,27 @@ class GitHub
     public function getIssue()
     {
     }
+
+    public function createIssue($data)
+    {
+        $issue = new \GitHub\Issue($this->http);
+
+        $xslt = new \XSLTProcessor();
+        $xsl = new \DOMDocument();
+        $xml = new \DOMDocument();
+
+        $xsl->load( "xslt/ticket_to_issue.xslt", LIBXML_NOCDATA);
+        $xml->loadXML( $data, LIBXML_NOCDATA);
+
+
+        $xslt->importStylesheet( $xsl );
+
+        $issueJson = $xslt->transformToXML( $xml );
+        if ($issueJson) 
+        {   
+            $ghResult = $issue->post($this->user, 'RESTFest', '2012-greenville-rosetta', $issueJson);
+            return $this->unmap($ghResult);
+        }        
+
+    }
 }
