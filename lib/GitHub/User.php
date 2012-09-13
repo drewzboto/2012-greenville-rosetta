@@ -5,6 +5,8 @@ class User
 {
     protected $token = null;
 
+    protected $http = null;
+
     public function __construct(\Guzzle\Service\ClientInterface $http)
     {
         $this->http = $http;
