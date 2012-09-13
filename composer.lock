@@ -1,5 +1,5 @@
 {
-    "hash": "42f63da8d510b29e9a23c376ec9ff5ec",
+    "hash": "7559976bc9f70e4084a6b32953216af9",
     "packages": [
         {
             "package": "guzzle/guzzle",
@@ -54,6 +54,10 @@
             "version": "2.1.x-dev",
             "source-reference": "v2.1.1",
             "commit-date": "1347274422"
+        },
+        {
+            "package": "twig/twig",
+            "version": "1.6.5"
         }
     ],
     "packages-dev": null,

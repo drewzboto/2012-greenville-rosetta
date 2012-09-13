@@ -15,6 +15,7 @@ class GitHub
 
     public function getIssues()
     {
+        // todo: etags / caching of content from GitHub
         $issues = new \GitHub\Issues($this->http);
         return $this->unmap($issues->get($this->user, 'RESTFest', '2012-greenville-rosetta'));
     }

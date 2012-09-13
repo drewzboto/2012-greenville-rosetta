@@ -6,6 +6,13 @@ use Symfony\Component\HttpFoundation\Response;
 
 $app = new Silex\Application();
 
+$app->register(
+    new Silex\Provider\TwigServiceProvider(),
+    array(
+        'twig.path'       => __DIR__.'/views'
+    )
+);
+
 $app['http'] = $app->share(function() {
     return new Guzzle\Service\Client('https://api.github.com');
 });
@@ -16,9 +23,16 @@ $app['anonymous'] = $app->share(function() use ($app) {
     return $user;
 });
 
+function getHackdayResponse($content)
+{
+    $response = new Response();
+    $response->headers->set('Content-Type', 'application/vnd.org.restfest.2012.hackday+xml');
+    $response->setContent($content);
+    return $response;
+}
+
 $app->get('/', function() use ($app) {
-    $res = new Response('<ticket>Stuff</ticket>', 200, array('Content-Type' => 'application/vnd.org.restfest.hackday2012+xml'));
-    return $res;
+    return getHackDayResponse($app['twig']->render('entry.twig', array()));
 });
 
 $app->get('/rels/tickets', function() use ($app) {
