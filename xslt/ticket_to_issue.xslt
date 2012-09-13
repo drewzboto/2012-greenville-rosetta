@@ -3,6 +3,7 @@
     xmlns:atom="http://www.w3.org/2005/Atom"
     xmlns:comments="urn:org.restfest.2012.hackday.helpdesk.comments"
     xmlns:ticket="urn:org.restfest.2012.hackday.helpdesk.ticket"
+    xmlns:user="urn:org.restfest.2012.hackday.helpdesk.user"
 >
 <xsl:output method="text"/>
 	<xsl:template match="ticket:ticket">
@@ -10,7 +11,7 @@
 	  "title": "<xsl:value-of select="ticket:summary"/>",
 	  "body": "<xsl:value-of select="ticket:description"/>",
 	  <xsl:if test="ticket:assignee">
-  	  "assignee": "<xsl:value-of select="ticket:assignee/ticket:name"/>",
+  	  "assignee": "<xsl:value-of select="ticket:assignee/user:user/ticket:name"/>",
   	  </xsl:if>
 	  "labels": [ 
 	    <xsl:for-each select="ticket:tag">
