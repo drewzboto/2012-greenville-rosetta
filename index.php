@@ -9,7 +9,7 @@ $app = new Silex\Application();
 $app->register(
     new Silex\Provider\TwigServiceProvider(),
     array(
-        'twig.path'       => __DIR__.'/views'
+        'twig.path' => 'views'
     )
 );
 
@@ -23,6 +23,10 @@ $app['anonymous'] = $app->share(function() use ($app) {
     return $user;
 });
 
+$app['github'] = $app->share(function() use ($app) {
+    return new RestFest\GitHub($app['http'], $app['anonymous']);
+});
+
 function getHackdayResponse($content)
 {
     $response = new Response();
@@ -32,12 +36,35 @@ function getHackdayResponse($content)
 }
 
 $app->get('/', function() use ($app) {
-    return getHackDayResponse($app['twig']->render('entry.twig', array()));
+    return getHackdayResponse($app['twig']->render('entry.twig', array('self' => "http://{$_SERVER['HTTP_HOST']}")));
 });
 
-$app->get('/rels/tickets', function() use ($app) {
-    $github = new RestFest\GitHub($app['http'], $app['anonymous']);
-    return $github->getIssues();
+$app->get('/tickets/', function() use ($app) {
+    return $app['github']->getIssues();
+});
+
+$app->post('/tickets/', function(Request $r) use ($app) {
+    try {
+        if ($number = $app['github']->createIssue($r->getContent())) {
+            return new Response('', 201, array('Location' => "http://{$_SERVER['HTTP_HOST']}/tickets/$number"));
+        }
+    } catch (\InvalidArgumentException $e) {
+        return new Response('Invalid payload', 400);
+    }
+
+    return new Response('', 500);
+});
+
+$app->get('/tickets/{id}', function($id) use ($app) {
+    return getHackdayResponse($app['github']->getIssue($id));
+});
+
+$app->put('/tickets/{id}', function(Request $r, $id) use ($app) {
+    if ($app['github']->updateIssue($id, $r->getContent())) {
+        return new Response('', 201);
+    }
+
+    return new Response('', 500);
 });
 
 $app->run();
