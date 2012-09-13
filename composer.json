@@ -1,6 +1,7 @@
 {
     "require": {
-        "silex/silex": "1.0.*"
+        "silex/silex": "1.0.*",
+        "guzzle/guzzle": "*"
     },
     "autoload": {
         "psr-0": {

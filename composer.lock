@@ -1,6 +1,12 @@
 {
-    "hash": "62c35b8eea7b2464cc4a1ee95718d7d6",
+    "hash": "fc137e0d3a0e21a883b381a4e69b0d63",
     "packages": [
+        {
+            "package": "guzzle/guzzle",
+            "version": "dev-master",
+            "source-reference": "e850c7ddba1d08157b9628f6dfed7626ef4407df",
+            "commit-date": "1347038647"
+        },
         {
             "package": "pimple/pimple",
             "version": "dev-master",
