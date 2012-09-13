@@ -47,7 +47,7 @@ class GitHub
     protected function unmap($data)
     {
         if (is_array($data)) {
-            $xml = new \SimpleXmlElement('<tickets></tickets>', 0, false, 'urn:org.restfest.2012.hackday.helpdesk.ticket');
+            $xml = new \SimpleXmlElement('<xmlns:tickets:tickets></xmlns:tickets:tickets>', 0, false, 'urn:org.restfest.2012.hackday.helpdesk.ticket');
             $xml->addAttribute('xmlns:xmlns', 'urn:org.restfest.2012.hackday.helpdesk.ticket');
             $xml->addAttribute('xmlns:xmlns:atom', 'http://www.w3.org/2005/Atom');
             $xml->addAttribute('xmlns:xmlns:comments', 'urn:org.restfest.2012.hackday.helpdesk.comments');
